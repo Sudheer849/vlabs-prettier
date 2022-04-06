@@ -13,27 +13,21 @@ let xz_grid = document.getElementById("xz-grid-cb");
 
 let modal_add = document.getElementById("add-modal");
 let modal_edit = document.getElementById("edit-modal");
-let initial_xcoordinate = 3;
-let initial_ycoordinate = 3;
-let initial_zcoordinate = 3;
-let xcoordinate = 0;
-let ycoordinate = 0;
-let zcoordinate = 0;
+
 let span_edit_modal = document.getElementsByClassName("close")[0];
 var slider = document.getElementById("slider");
 slider.addEventListener("input", movePoint);
 document.getElementById("slider").max =
-  document.getElementById("finalx").value - initial_xcoordinate;
+  document.getElementById("theta").value - 3;
 document.getElementById("slider").min = 0;
 slider.step =
   (document.getElementById("slider").max -
     document.getElementById("slider").min) /
   document.getElementById("frames").value;
-let final_xcoordinate = document.getElementById("finalx").value;
-let final_ycoordinate = document.getElementById("finaly").value;
-let final_zcoordinate = document.getElementById("finalz").value;
+let theta_change = document.getElementById("theta").value;
 let frames = document.getElementById("frames").value;
 let deletebutton = document.getElementById("deletebutton");
+let present_theta = 0;
 let scene,
   camera,
   renderer,
@@ -609,134 +603,60 @@ document.addEventListener("pointerup", () => {
 // Slider Implementation
 // ---------------------------------------------------------------------------------------
 function movePoint(e) {
-  //Matrix.needsUpdate = true;
+  console.log("Hello");
   var target = e.target ? e.target : e.srcElement;
-  let dup_xcoordinate =
-    target.value *
-    (document.getElementById("finalx").value - initial_xcoordinate);
-  xcoordinate = xcoordinate / target.max;
-  let dup_ycoordinate =
-    target.value *
-    (document.getElementById("finaly").value - initial_ycoordinate);
-  ycoordinate = ycoordinate / target.max;
-  let dup_zcoordinate =
-    target.value *
-    (document.getElementById("finalz").value - initial_zcoordinate);
-  zcoordinate = zcoordinate / target.max;
-  console.log(ycoordinate);
-  console.log(dup_xcoordinate - xcoordinate, dup_ycoordinate - ycoordinate, dup_zcoordinate - zcoordinate);
-  xcoordinate = dup_xcoordinate;
-  ycoordinate = dup_ycoordinate;
-  zcoordinate = dup_zcoordinate;
-  //let matrix = new THREE.Matrix4();
-  // matrix  --- dot_list[0].matrix;
-
- // dot_list[0].position.set(xcoordinate, ycoordinate, zcoordinate);
-  const tranformation_matrix = new THREE.Matrix4().makeTranslation(xcoordinate, ycoordinate, zcoordinate);
-  console.log(tranformation_matrix);
-  dot_list[0].applyMatrix(tranformation_matrix);
-  document.getElementById("quantityx").value = parseFloat(
-    dot_list[0].position.x + initial_xcoordinate
-  );
-  document.getElementById("quantityy").value = parseFloat(
-    dot_list[0].position.y + initial_ycoordinate
-  );
-  document.getElementById("quantityz").value = parseFloat(
-    dot_list[0].position.z + initial_zcoordinate
-  );
-  console.log(dot_list[0].position.x);
-  console.log(initial_xcoordinate);
-  console.log(
-    parseFloat(dot_list[0].position.x) + parseFloat(initial_xcoordinate)
-  );
+  let theta = target.value * document.getElementById("theta").value;
+  theta = theta / target.max;
+  present_theta = theta;
+  let radius = 3 * Math.sqrt(2);
+  let x = radius * Math.cos((theta * Math.PI) / 180 + Math.PI / 4);
+  let y = radius * Math.sin((theta * Math.PI) / 180 + Math.PI / 4);
+  let z = 3;
+  dot_list[0].position.set(x - 3, y - 3, z - 3);
+  console.log(Math.cos((theta * Math.PI) / 180));
+  document.getElementById("quantityx").value =
+    parseFloat(dot_list[0].position.x) + 3;
+  document.getElementById("quantityy").value =
+    parseFloat(dot_list[0].position.y) + 3;
+  document.getElementById("quantityz").value =
+    parseFloat(dot_list[0].position.z) + 3;
 }
-
-document.getElementById("finalx").onchange = function () {
+document.getElementById("theta").onchange = function () {
   let slider_value = document.getElementById("slider").value;
   console.log(slider_value);
-  let new_value = document.getElementById("finalx").value; // new value
-  let new_position =
-    initial_xcoordinate +
-    (dot_list[0].position.x * (new_value - initial_xcoordinate)) /
-      (final_xcoordinate - initial_xcoordinate);
-  dot_list[0].position.set(
-    new_position - initial_xcoordinate,
-    dot_list[0].position.y,
-    dot_list[0].position.z
-  );
+  let new_value = document.getElementById("theta").value; // new value
+  let new_theta = present_theta * (new_value / theta_change);
+  let radius = 3 * Math.sqrt(2);
+  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let z = 3;
+  dot_list[0].position.set(x - 3, y - 3, z - 3);
   document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + initial_xcoordinate;
+    parseFloat(dot_list[0].position.x) + 3;
   document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + initial_ycoordinate;
+    parseFloat(dot_list[0].position.y) + 3;
   document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + initial_zcoordinate;
+    parseFloat(dot_list[0].position.z) + 3;
 
-  final_xcoordinate = new_value;
+  theta_change = new_value;
   document.getElementById("slider").value = slider_value;
   console.log(document.getElementById("slider").value);
 };
-document.getElementById("finaly").onchange = function () {
-  let new_value = document.getElementById("finaly").value; // new value
-  let new_position =
-    initial_ycoordinate +
-    (dot_list[0].position.y * (new_value - initial_ycoordinate)) /
-      (final_ycoordinate - initial_ycoordinate);
-  dot_list[0].position.set(
-    dot_list[0].position.x,
-    new_position - initial_ycoordinate,
-    dot_list[0].position.z
-  );
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + initial_xcoordinate;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + initial_ycoordinate;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + initial_zcoordinate;
-  final_ycoordinate = new_value;
-};
-document.getElementById("finalz").onchange = function () {
-  let new_value = document.getElementById("finalz").value; // new value
-  let new_position =
-    initial_zcoordinate +
-    (dot_list[0].position.z * (new_value - initial_zcoordinate)) /
-      (final_zcoordinate - initial_zcoordinate);
-  dot_list[0].position.set(
-    dot_list[0].position.x,
-    dot_list[0].position.y,
-    new_position - initial_zcoordinate
-  );
-  document.getElementById("quantityx").value =
-    parseFloat(dot_list[0].position.x) + initial_xcoordinate;
-  document.getElementById("quantityy").value =
-    parseFloat(dot_list[0].position.y) + initial_ycoordinate;
-  document.getElementById("quantityz").value =
-    parseFloat(dot_list[0].position.z) + initial_zcoordinate;
-  final_zcoordinate = new_value;
-};
+
 document.getElementById("frames").onchange = function () {
-  let new_value = document.getElementById("frames").value; // new value
-  let new_xcoord =
-    initial_xcoordinate +
-    parseFloat((dot_list[0].position.x * frames) / new_value);
-  let new_ycoord =
-    initial_ycoordinate +
-    parseFloat((dot_list[0].position.y * frames) / new_value);
-  let new_zcoord =
-    initital_zcoordinate +
-    parseFloat((dot_list[0].position.z * frames) / new_value);
-  console.log(frames, new_value);
-  console.log(new_xcoord, new_ycoord, new_zcoord);
-  dot_list[0].position.set(
-    new_xcoord - initial_xcoordinate,
-    new_ycoord - initial_ycoordinate,
-    new_zcoord - initial_zcoordinate
-  );
-  document.getElementById("quantityx").value = parseFloat(new_xcoord);
-  document.getElementById("quantityy").value = parseFloat(new_ycoord);
-  document.getElementById("quantityz").value = parseFloat(new_zcoord);
-  /*document.getElementById("slider").max =
-      document.getElementById("finalx").value - 3;
-    document.getElementById("slider").min = 0;*/
+  let new_value = document.getElementById("frames").value;
+  let new_theta = present_theta * (frames / new_value);
+  let radius = 3 * Math.sqrt(2);
+  let x = radius * Math.cos((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let y = radius * Math.sin((new_theta * Math.PI) / 180 + Math.PI / 4);
+  let z = 3;
+  dot_list[0].position.set(x - 3, y - 3, z - 3);
+  document.getElementById("quantityx").value =
+    parseFloat(dot_list[0].position.x) + 3;
+  document.getElementById("quantityy").value =
+    parseFloat(dot_list[0].position.y) + 3;
+  document.getElementById("quantityz").value =
+    parseFloat(dot_list[0].position.z) + 3;
   slider.step =
     (document.getElementById("slider").max -
       document.getElementById("slider").min) /
@@ -747,6 +667,7 @@ document.getElementById("frames").onchange = function () {
   //  document.getElementById("slider").value =  * (new_value/frames)
   frames = new_value;
 };
+
 // --------------------------------------------------------------------------------------------------
 
 // Cube Function
@@ -789,24 +710,7 @@ move_button.addEventListener("click", () => {
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
   console.log(x, y, z);
-  /*dot_list[0].position.set(
-    x - initial_xcoordinate,
-    y - initial_ycoordinate,
-    z - initial_zcoordinate
-  );*/
-  initial_xcoordinate = parseFloat(x);
-  initial_ycoordinate = parseFloat(y);
-  initial_zcoordinate = parseFloat(z);
-  scene.remove(dot_list[0]);
-  dot_list.pop();
-  let PointGeometry = Dot();
-  document.getElementById("slider").max =
-    document.getElementById("finalx").value - initial_xcoordinate;
-  slider.step =
-    (document.getElementById("slider").max -
-      document.getElementById("slider").min) /
-    document.getElementById("frames").value;
-  // console.log(initial_xcoordinate, initial_ycoordinate, initial_zcoordinate);
+  dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
 });
 // Dodecahedron Function
 // --------------------------------------------------------------------------------------------------
@@ -910,7 +814,7 @@ let createTetrahedron = function (x, y, z) {
   dragz.push(shapes[shapes.length - 1].geometry.vertices[0].z);
 };
 
-/*move_button.addEventListener("click", () => {
+move_button.addEventListener("click", () => {
   let x = document.getElementById("quantityx").value;
   let y = document.getElementById("quantityy").value;
   let z = document.getElementById("quantityz").value;
@@ -923,21 +827,14 @@ move_button.addEventListener("click", () => {
   let z = document.getElementById("quantityz").value;
   console.log(x, y, z);
   dot_list[0].position.set(x - xcor, y - ycor, z - zcor);
-});*/
+});
 
 // Dot Function
 // --------------------------------------------------------------------------------------------------
 
 let Dot = function () {
   let dotGeometry = new THREE.Geometry();
-  dotGeometry.vertices.push(
-    new THREE.Vector3(
-      initial_xcoordinate,
-      initial_ycoordinate,
-      initial_zcoordinate
-    )
-  );
-  console.log(initial_xcoordinate, initial_ycoordinate, initial_zcoordinate);
+  dotGeometry.vertices.push(new THREE.Vector3(xcor, ycor, zcor));
   let dotMaterial = new THREE.PointsMaterial({
     size: 6,
     sizeAttenuation: false,
@@ -1054,3 +951,23 @@ let mainLoop = function () {
 };
 init();
 mainLoop();
+
+/*
+function movePoint(e) {
+  var target = e.target ? e.target : e.srcElement;
+  let theta =
+    target.value * (document.getElementById("theta").value - 3);
+  theta = theta / target.max;
+  let radius = 3*Math.sqrt(2);
+  let x = radius * Math.cos(theta);
+  let y = radius * Math.sin(theta);
+  let z = 3;
+  dot_list[0].position.set(x, y, z);
+  document.getElementById("quantityx").value =
+    parseFloat(dot_list[0].position.x) + 3;
+  document.getElementById("quantityy").value =
+    parseFloat(dot_list[0].position.y) + 3;
+  document.getElementById("quantityz").value =
+    parseFloat(dot_list[0].position.z) + 3;
+}
+*/

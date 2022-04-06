@@ -279,13 +279,9 @@
 
                 <form>
                     <label for="quantity">No of Frames:</label>
-                    <input type="number" id="frames" name="noofframes" min="1" step="1" value="1000"></br>
-                    <label for="quantity">Final X-coordinate:</label>
-                    <input type="number" id="finalx" name="finalx" step=".01" value="9"></br>
-                    <label for="quantity">Final Y-coordinate:</label>
-                    <input type="number" id="finaly" name="finaly" step=".01" value="6"> </br>
-                    <label for="quantity">Final Z-coordinate:</label>
-                    <input type="number" id="finalz" name="finalz" step=".01" value="7"> </br>
+                    <input type="number" id="frames" name="noofframes" min="1" step="1" value="100"></br>
+                    <label for="quantity">Theta:</label>
+                    <input type="number" id="theta" name="theta" step="0.01" value="180"></br>
                 </form>
 
                 <div class="v-datalist-row v-bold" id="output1"></div>
@@ -301,7 +297,7 @@
         </div>
     </div>
 
-    <input class="slider exptwoslider is-fullwidth" id="slider" step="1" min="0" max="100" value="0" type="range">
+    <input class="slider exptwoslider is-fullwidth" id="slider" step="1" min="0" max="1000" value="0" type="range">
 
 
     <!-- <script>
@@ -310,7 +306,7 @@
                             </script> -->
 
     <script src="https://unpkg.com/mathjs@9.2.0/lib/browser/math.js"></script>
-    <script type="module" src="exp2main.js"></script>
-</body>
+   <script type="module" src="exp4main.js"></script>
+    </body>
 
 </html>
