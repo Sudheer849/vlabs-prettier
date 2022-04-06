@@ -191,11 +191,11 @@ let buttons = document.getElementsByTagName("button");
 const size = 50;
 const divisions = 25;
 
-let camera2, scene2, controls;
+var camera2, scene2, controls;
 function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
-  // 1 === orthographic, 0 === perspective
+  // 1 == orthographic, 0 == perspective
   scene.remove(camera);
-  if (ortho_persp === 1) {
+  if (ortho_persp == 1) {
     camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
   } else {
     // cam2 = new THREE.PerspectiveCamera( Math.atan( ( (top - bottom)/( near + far ) ), (left - right) / (top - bottom) , near, far) );
@@ -214,7 +214,7 @@ function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_ve
   // document.body.appendChild(newRenderer.domElement);
 
   // orbit controls
-  // if (ortho_persp === 0) {
+  // if (ortho_persp == 0) {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.mouseButtons = {
       // LEFT: THREE.MOUSE.PAN,
@@ -224,6 +224,9 @@ function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_ve
     controls.target.set(target.x, target.y, target.z);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05; 
+    orbit.minPolarAngle = 0;
+    orbit.maxPolarAngle = 180;
+
     controls.update();  
   // }
   return camera;
@@ -240,7 +243,7 @@ document.getElementById("new-cam").onclick = function (){
   // function AddCam ( near, far, left, right, bottom, top, camera_pos, target, up_vec, ortho_persp ) {
   // AddCam(0.1, 1000, -10, -10, -10, 10, new THREE.Vector3(7,-6,2), new THREE.Vector3(1,1,1), new THREE.Vector3(1,0,1), 0);
   // AddCam(0.01, 100, -3.2, 3.2, -2.4, 2.4, new THREE.Vector3(3,5,2), new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 1);
-
+  alert("hi");
   let near = document.getElementById("near-coord").value;
   let far = document.getElementById("far-coord").value;
   let left = document.getElementById("left-coord").value;
@@ -251,9 +254,13 @@ document.getElementById("new-cam").onclick = function (){
   let camera_pos = new THREE.Vector3(document.getElementById("cam-x").value, document.getElementById("cam-y").value, document.getElementById("cam-z").value);
   let target = new THREE.Vector3(document.getElementById("target-x").value, document.getElementById("target-y").value, document.getElementById("target-z").value);
   let up_vec = new THREE.Vector3(document.getElementById("up-x").value, document.getElementById("up-y").value, document.getElementById("up-z").value);
-  let ortho_persp = document.getElementById("ortho-id").value;
+  // let ortho_persp = document.getElementById("ortho-id").value;
+  let camtype = document.getElementById("cam-type").value;
 
-  AddCam(near, far, left, right, bottom, top, camera_pos, target, up_vec, parseInt(ortho_persp) );
+  // debug
+  console.log(near, far, left, right, top, bottom, camera_pos, target, up_vec, parseInt(camtype));
+
+  AddCam(parseFloat(near), parseFloat(far), parseFloat(left), parseFloat(right), parseFloat(top), parseFloat(bottom), camera_pos, target, up_vec, parseInt(camtype) );
 }
 
 // Add a camera 
@@ -288,8 +295,6 @@ function OldCam () {
 
   return camera;
 }
-
-
 
 function Change(event) {
   // scene.remove(arrowHelper2);
@@ -482,7 +487,7 @@ document.addEventListener("pointermove", (event) => {
     document.getElementById("h-x").value = h_x.toFixed(2);
     document.getElementById("h-y").value = h_y.toFixed(2);
     document.getElementById("h-z").value = h_z.toFixed(2);
-  } else if (isDragging) {
+  } /*else if (isDragging) {
     console.log("Hello");
     raycaster.ray.intersectPlane(plane, planeIntersect);
     //  dot.geometry.verticesNeedUpdate = true;
@@ -503,7 +508,7 @@ document.addEventListener("pointermove", (event) => {
     document.getElementById("h-x").value = h_x.toFixed(2);
     document.getElementById("h-y").value = h_y.toFixed(2);
     document.getElementById("h-z").value = h_z.toFixed(2);
-  }
+  }*/
 });
 
 // mouse click

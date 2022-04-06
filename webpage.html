@@ -205,17 +205,17 @@
                                     <input class="input is-small" style="width:20%" type="text" id="up-z" placeholder="Up-Z">
                                 </div>
                                 <p>Type</p>
-                                <div id ="camera-type"class="control">
-                                    <div class="select" style=" display: flexbox;">
-                                      <select>
-                                        <option>Orthographic</option>
-                                        <option>Perspective</option>
-                                      </select>
-                                    </div>
-                                </div>
-                                <div class="control">
-                                    <button class="button is-small is-link" id="new-cam">Submit</button>
-                                </div>
+                                <!-- <div id ="camera-type" class="control" value="1"> -->
+                                    <div id="ortho-id" class="select" style="float:left;">
+                                        <select id="cam-type" name="" value="1">
+                                          <option value="1">Orthographic</option>
+                                          <option value="0">Perspective</option>
+                                        </select>
+                                      </div>
+                                  <!-- </div> -->
+                                  <div class="control">
+                                      <button class="button is-link" id="new-cam">Submit</button>
+                                  </div>
                             </div>
                         </p>
                     </div>
